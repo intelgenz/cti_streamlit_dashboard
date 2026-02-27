@@ -1,138 +1,152 @@
 import streamlit as st
+import webbrowser
 
-# -------------------- PAGE CONFIG --------------------
+# ---------------------------------------------------
+# Page Configuration
+# ---------------------------------------------------
 st.set_page_config(
     page_title="IntelGenz CTI",
     page_icon="🛡️",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
-# -------------------- CUSTOM CSS --------------------
-# Injects styles to make buttons and the link tile look like sleek cards
+# ---------------------------------------------------
+# Custom CSS - Premium Production Look
+# ---------------------------------------------------
 st.markdown("""
 <style>
-    /* Style for all tile containers */
-    div[data-testid="column"] {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
 
-    /* Style for Streamlit buttons (used for non‑link tiles) */
-    .stButton > button {
-        width: 280px;
-        height: 160px;
-        background: linear-gradient(145deg, #f0f2f6, #ffffff);
-        border: 1px solid #e0e4e9;
-        border-radius: 16px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1e293b;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        line-height: 1.4;
-    }
+/* Background */
+.stApp {
+    background: linear-gradient(120deg, #141e30, #243b55);
+    color: white;
+}
 
-    .stButton > button:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-        border-color: #a5b4cb;
-        color: #0f172a;
-    }
+/* Neon Visible Title */
+.main-title {
+    font-size: 60px;
+    font-weight: 900;
+    text-align: center;
+    color: #00f5ff;
+    text-shadow: 0px 0px 25px #00f5ff;
+    margin-bottom: 10px;
+}
 
-    /* Style for the custom link tile (Source Management) */
-    .tile-link {
-        width: 280px;
-        height: 160px;
-        background: linear-gradient(145deg, #f0f2f6, #ffffff);
-        border: 1px solid #e0e4e9;
-        border-radius: 16px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #1e293b;
-        transition: all 0.2s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        line-height: 1.4;
-        text-decoration: none;
-        cursor: pointer;
-    }
+/* Subtitle */
+.subtitle {
+    text-align: center;
+    font-size: 20px;
+    color: #e2e8f0;
+    margin-bottom: 60px;
+}
 
-    .tile-link:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-        border-color: #a5b4cb;
-        background: #ffffff;
-    }
+/* Big Rectangle Buttons */
+.big-tile button {
+    height: 200px;
+    font-size: 24px;
+    font-weight: 700;
+    border-radius: 25px;
+    border: none;
+    transition: all 0.4s ease;
+}
 
-    .tile-link a {
-        text-decoration: none;
-        color: inherit;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+/* Tile Colors */
+.source button {
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    color: white;
+}
 
-    /* Adjust layout for small screens */
-    @media (max-width: 768px) {
-        .stButton > button, .tile-link {
-            width: 240px;
-            height: 140px;
-            font-size: 1rem;
-        }
-    }
+.pipeline button {
+    background: linear-gradient(135deg, #24c6dc, #514a9d);
+    color: white;
+}
+
+.data button {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+}
+
+.cluster button {
+    background: linear-gradient(135deg, #f7971e, #ffd200);
+    color: black;
+}
+
+.cve button {
+    background: linear-gradient(135deg, #8e2de2, #4a00e0);
+    color: white;
+}
+
+/* Hover Effect */
+.big-tile button:hover {
+    transform: scale(1.04);
+    box-shadow: 0px 15px 45px rgba(0,0,0,0.5);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 80px;
+    font-size: 14px;
+    color: #cbd5e1;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-# -------------------- HEADER --------------------
-st.title("🛡️ IntelGenz CTI Dashboard")
-st.markdown("---")
+# ---------------------------------------------------
+# Header Section
+# ---------------------------------------------------
+st.markdown('<div class="main-title">🛡️ IntelGenz CTI</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Next-Gen Cyber Threat Intelligence Platform</div>', unsafe_allow_html=True)
 
-# -------------------- TILE DEFINITIONS --------------------
-# Each tile: (title, is_link, url_or_message)
-# is_link = True only for Source Management
-tiles = [
-    {"title": "Source Management", "is_link": True, "url": "https://www.cricbuzz.com/"},
-    {"title": "Source URL Pipeline", "is_link": False, "message": "Will be available soon"},
-    {"title": "Data Acquisition Pipeline", "is_link": False, "message": "Will be available soon"},
-    {"title": "Cluster Management", "is_link": False, "message": "Will be available soon"},
-    {"title": "CVE ID Pipeline", "is_link": False, "message": "Will be available soon"},
-]
+# ---------------------------------------------------
+# Big Rectangle Tiles Layout
+# ---------------------------------------------------
 
-# Arrange tiles in rows of 3, then 2 (total 5)
-rows = [tiles[:3], tiles[3:]]
+# Row 1
+col1, col2 = st.columns(2)
 
-for row in rows:
-    cols = st.columns(len(row))
-    for col, tile in zip(cols, row):
-        with col:
-            if tile["is_link"]:
-                # Render clickable tile that opens the URL in a new tab
-                st.markdown(
-                    f"""
-                    <div class="tile-link">
-                        <a href="{tile['url']}" target="_blank">{tile['title']}</a>
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
-            else:
-                # Render a button that shows an info message when clicked
-                if st.button(tile["title"], key=tile["title"]):
-                    st.info(tile["message"])
+with col1:
+    st.markdown('<div class="big-tile source">', unsafe_allow_html=True)
+    if st.button("📂  Source Management", use_container_width=True):
+        webbrowser.open("https://www.cricbuzz.com/")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# -------------------- FOOTER (optional) --------------------
-st.markdown("---")
-st.caption("🔐 IntelGenz CTI – Threat Intelligence Dashboard")
+with col2:
+    st.markdown('<div class="big-tile pipeline">', unsafe_allow_html=True)
+    if st.button("🔗  Source URL Pipeline\n\nWill be available soon", use_container_width=True):
+        st.warning("Will be available soon 🚀")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown(" ")
+
+# Row 2
+col3, col4 = st.columns(2)
+
+with col3:
+    st.markdown('<div class="big-tile data">', unsafe_allow_html=True)
+    if st.button("📥  Data Acquisition Pipeline\n\nWill be available soon", use_container_width=True):
+        st.warning("Will be available soon 🚀")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col4:
+    st.markdown('<div class="big-tile cluster">', unsafe_allow_html=True)
+    if st.button("🧠  Cluster Management\n\nWill be available soon", use_container_width=True):
+        st.warning("Will be available soon 🚀")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown(" ")
+
+# Row 3 - Full Width
+st.markdown('<div class="big-tile cve">', unsafe_allow_html=True)
+if st.button("🛑  CVE ID Pipeline  —  Will be available soon", use_container_width=True):
+    st.warning("Will be available soon 🚀")
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ---------------------------------------------------
+# Footer
+# ---------------------------------------------------
+st.markdown(
+    '<div class="footer">© 2026 IntelGenz | Cyber Threat Intelligence Platform</div>',
+    unsafe_allow_html=True
+)
