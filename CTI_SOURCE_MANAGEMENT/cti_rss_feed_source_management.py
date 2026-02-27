@@ -10,20 +10,20 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-#for local testing, ensure .env file has the correct values for these variables
-SERVER   = os.getenv('AZURE_SQL_SERVER')
-DATABASE = os.getenv('AZURE_SQL_DATABASE')
-USERNAME = os.getenv('AZURE_SQL_USERNAME')
-PASSWORD = os.getenv('AZURE_SQL_PASSWORD')
-SOURCE_DB_TABLE_NAME = os.getenv('SOURCE_DB_TABLE_NAME')
+# for local testing, ensure .env file has the correct values for these variables
+# SERVER   = os.getenv('AZURE_SQL_SERVER')
+# DATABASE = os.getenv('AZURE_SQL_DATABASE')
+# USERNAME = os.getenv('AZURE_SQL_USERNAME')
+# PASSWORD = os.getenv('AZURE_SQL_PASSWORD')
+# SOURCE_DB_TABLE_NAME = os.getenv('SOURCE_DB_TABLE_NAME')
 
 #for streamlit cloud deployment, set these environment variables in the Streamlit Cloud dashboard and ensure they are correctly referenced here. Do not hardcode sensitive information in the codebase.
 
-# SERVER = st.secrets["AZURE_SQL_SERVER"]
-# USERNAME = st.secrets["AZURE_SQL_USERNAME"]
-# PASSWORD = st.secrets["AZURE_SQL_PASSWORD"]
-# DATABASE = st.secrets["AZURE_SQL_DATABASE"]
-# SOURCE_DB_TABLE_NAME = st.secrets.get("SOURCE_DB_TABLE_NAME", "source_db")  # Default to 'source_db' if not set
+SERVER = st.secrets["AZURE_SQL_SERVER"]
+USERNAME = st.secrets["AZURE_SQL_USERNAME"]
+PASSWORD = st.secrets["AZURE_SQL_PASSWORD"]
+DATABASE = st.secrets["AZURE_SQL_DATABASE"]
+SOURCE_DB_TABLE_NAME = st.secrets.get("SOURCE_DB_TABLE_NAME")
 
 if not all([SERVER, DATABASE, USERNAME, PASSWORD, SOURCE_DB_TABLE_NAME]):
     raise ValueError("Missing database environment variables. Check .env file.")
