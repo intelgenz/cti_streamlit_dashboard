@@ -1,1 +1,6 @@
 streamlit
+pyodbc
+python-dotenv
+pytz
+tzdata
+pandas
