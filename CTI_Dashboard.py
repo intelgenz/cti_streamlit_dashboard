@@ -189,7 +189,7 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
-    <a class="card" href="https://www.cricbuzz.com/" target="_blank">
+    <a class="card" href="https://cti-source-mangement.streamlit.app/" target="_blank">
         <div class="card-top">
             <div class="card-icon" style="background:#0c2a3a;">📂</div>
             <div>
