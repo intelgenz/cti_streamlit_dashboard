@@ -1,5 +1,5 @@
 streamlit
-pymssql
+mysql-connector-python
 python-dotenv
 pytz
 tzdata
