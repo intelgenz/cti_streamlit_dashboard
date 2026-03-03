@@ -17,7 +17,7 @@ DATABASE = os.getenv('AZURE_MYSQL_DATABASE')
 USERNAME = os.getenv('AZURE_MYSQL_USERNAME')
 PASSWORD = os.getenv('AZURE_MYSQL_PASSWORD')
 SOURCE_DB_TABLE_NAME = os.getenv('SOURCE_DB_TABLE_NAME')
-SSL_CA = "DigiCertGlobalRootG2.crt.pem"  # Ensure this file is in the same directory or provide correct path
+SSL_CA = "./DigiCertGlobalRootG2.crt.pem"  # Ensure this file is in the same directory or provide correct path
 
 # For Streamlit Cloud deployment, set these in the Streamlit Cloud dashboard:
 # SERVER   = st.secrets["AZURE_MYSQL_SERVER"]
