@@ -11,6 +11,7 @@ from typing import Optional
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
+from functools import lru_cache
 
 load_dotenv()  # loads .env file before any os.getenv() calls
 
@@ -21,7 +22,7 @@ SERVER   = os.getenv("AZURE_MYSQL_SERVER")
 DATABASE = os.getenv("AZURE_MYSQL_DATABASE")
 USERNAME = os.getenv("AZURE_MYSQL_USERNAME")
 PASSWORD = os.getenv("AZURE_MYSQL_PASSWORD")
-SSL_CA   = "./DigiCertGlobalRootG2.crt.pem"  # must be in same folder as this file
+SSL_CA   = "DigiCertGlobalRootG2.crt.pem"  # must be in same folder as this file
 
 CREATED_BY = "yadhavaprasanna"
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -138,6 +139,7 @@ def generate_url_ids_for_batch(count: int) -> list[str]:
 def fetch_all_sources() -> list[dict]:
     """
     Fetch all RSS sources from source_db.
+    Cached for 5 minutes — sources change rarely.
     Returns list of dicts with keys: id, source_id, source_name, source_url, source_type.
     """
     conn = get_connection()
@@ -207,6 +209,18 @@ def insert_urls(records: list[dict]) -> int:
     return inserted
 
 
+def sanitize_text(text: Optional[str]) -> Optional[str]:
+    """
+    Strip 4-byte UTF-8 characters (emojis, rare unicode) that MySQL utf8 (3-byte)
+    columns cannot store. Returns None if input is None.
+    Use this on any text field before inserting into url_db.
+    """
+    if not text:
+        return None
+    # Remove any character outside the Basic Multilingual Plane (U+0000 to U+FFFF)
+    return "".join(c for c in text if ord(c) <= 0xFFFF).strip() or None
+
+
 def build_url_record(
     url_id: str,
     url: str,
@@ -218,19 +232,19 @@ def build_url_record(
     """Build a url_db record dict ready for insertion."""
     ts = now_ist()
     return {
-        "url_id":            url_id,
-        "url":               url,
-        "url_source":        source_name,
-        "url_source_id":     source_id,
-        "url_source_type":   "rss_source",
-        "url_title":         title if title else None,
+        "url_id":             url_id,
+        "url":                url,
+        "url_source":         sanitize_text(source_name),
+        "url_source_id":      source_id,
+        "url_source_type":    "rss_source",
+        "url_title":          sanitize_text(title),
         "url_published_date": parse_to_ist(published_str),
-        "url_status":        "unprocessed",
-        "url_created_type":  "scraped",
-        "url_created_at":    ts,
-        "url_created_by":    CREATED_BY,
-        "url_updated_at":    ts,
-        "url_updated_by":    CREATED_BY,
+        "url_status":         "unprocessed",
+        "url_created_type":   "scraped",
+        "url_created_at":     ts,
+        "url_created_by":     CREATED_BY,
+        "url_updated_at":     ts,
+        "url_updated_by":     CREATED_BY,
     }
 
 
