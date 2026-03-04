@@ -21,7 +21,7 @@ SERVER   = os.getenv("AZURE_MYSQL_SERVER")
 DATABASE = os.getenv("AZURE_MYSQL_DATABASE")
 USERNAME = os.getenv("AZURE_MYSQL_USERNAME")
 PASSWORD = os.getenv("AZURE_MYSQL_PASSWORD")
-SSL_CA   = "DigiCertGlobalRootG2.crt.pem"  # must be in same folder as this file
+SSL_CA   = "./DigiCertGlobalRootG2.crt.pem"  # must be in same folder as this file
 
 CREATED_BY = "yadhavaprasanna"
 IST = timezone(timedelta(hours=5, minutes=30))
