@@ -211,7 +211,7 @@ with col2:
                 <div class="card-desc">Automated URL ingestion and processing</div>
             </div>
         </div>
-        <span class="card-badge badge-soon">Coming Soon</span>
+        <span class="card-badge badge-active">● Active</span>
     </div>
     """, unsafe_allow_html=True)
 
