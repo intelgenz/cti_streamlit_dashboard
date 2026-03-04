@@ -203,7 +203,7 @@ with col1:
 
 with col2:
     st.markdown("""
-    <div class="card">
+   <a class="card" href="https://cti-url-management.streamlit.app/" target="_blank">
         <div class="card-top">
             <div class="card-icon" style="background:#1a1535;">🔗</div>
             <div>
